@@ -24,8 +24,7 @@ class arptables ($suppress_arp = [] ) {
 
     file { 
         '/etc/sysconfig/arptables':
-            content => template("arptables_jf/arptables.erb"),
-            #'puppet:///arptables_jf/arptables',
+            content => template("arptables/arptables.erb"),
             owner => 'root', group => 'root',
             notify => Service['arptables_jf'],
             ensure => 'file';
@@ -35,8 +34,5 @@ class arptables ($suppress_arp = [] ) {
         'arptables_jf':
             enable => 'true';
     }
-
-}
-
 
 }
