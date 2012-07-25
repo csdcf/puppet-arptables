@@ -1,0 +1,14 @@
+# $Id$
+# vi: shiftwidth=4 tabstop=4 smarttab expandtab formatoptions=croql
+#
+# This file is currently maintained by puppet. Local changes will be overwritten!
+#
+*filter
+:IN ACCEPT [0:0]
+:OUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+<% suppress_arp.each do |val| -%> 
+[0:0] -A IN -d <%= val %> -j DROP 
+[0:0] -A OUT -s <%= val %> -j mangle --mangle-ip-s <%= ipaddress %>
+<% end -%>
+COMMIT
