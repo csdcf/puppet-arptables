@@ -18,21 +18,24 @@
 # [Remember: No empty lines between comments and class definition]
 class arptables ($suppress_arp = [] ) {
 
-    package { 
-        'arptables_jf': ensure => present;
-    }
+    if $operatingsystem in [ 'CentOS', 'fedora' ] {
+        package { 
+            'arptables_jf': ensure => present;
+        }
 
-    file { 
-        '/etc/sysconfig/arptables':
-            content => template("arptables/arptables.erb"),
-            owner => 'root', group => 'root',
-            notify => Service['arptables_jf'],
-            ensure => 'file';
-    }
+        file { 
+            '/etc/sysconfig/arptables':
+                content => template("arptables/arptables.erb"),
+                owner => 'root', group => 'root',
+                notify => Service['arptables_jf'],
+                ensure => 'file';
+        }
 
-    service { 
-        'arptables_jf':
-            enable => 'true';
+        service { 
+            'arptables_jf':
+                enable => 'true';
+        }
+
     }
 
 }

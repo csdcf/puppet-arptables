@@ -1,3 +1,5 @@
 arptables
 
-This module controls the ARP filters in the Linux kernel via arptables_jf
+This module controls the ARP filters in the Linux kernel via arptables_jf,
+specifically by constructing an arptables file in /etc/sysconfig/arp.
+This is Fedora/CentOS/RHEL specific.
