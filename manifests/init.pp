@@ -18,24 +18,43 @@
 # [Remember: No empty lines between comments and class definition]
 class arptables ($suppress_arp = [] ) {
 
-    if $operatingsystem in [ 'CentOS', 'fedora' ] {
-        package { 
-            'arptables_jf': ensure => present;
-        }
+	if $operatingsystem in [ 'CentOS', 'fedora' ] {
 
-        file { 
-            '/etc/sysconfig/arptables':
-                content => template("arptables/arptables.erb"),
-                owner => 'root', group => 'root',
-                notify => Service['arptables_jf'],
-                ensure => 'file';
-        }
+		if $operatingsystemmajrelease == '7' {
+			$pkg = "arptables"
 
-        service { 
-            'arptables_jf':
-                enable => 'true';
-        }
+			file { 
+				'/etc/sysconfig/arptables':
+					content => template("arptables/arptables_centos7.erb"),
+					owner => 'root', group => 'root',
+					notify => Service[$pkg],
+					ensure => 'file';
+			}
 
-    }
 
+		} else {
+			$pkg = "arptables_jf"
+
+			file { 
+				'/etc/sysconfig/arptables':
+					content => template("arptables/arptables.erb"),
+					owner => 'root', group => 'root',
+					notify => Service[$pkg],
+					ensure => 'file';
+			}
+
+
+		}
+
+
+		package { 
+		    $pkg: ensure => present;
+		}
+
+		service { 
+		    $pkg:
+			 enable => 'true',
+		   	 ensure => 'running';
+		}
+	}
 }
